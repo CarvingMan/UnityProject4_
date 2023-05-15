@@ -15,16 +15,17 @@ public class GameDirector : MonoBehaviour
     GameObject gBtnRE;
 
 
-    
+
     float fLength = 0.0f;
     float fDelta = 0.0f; //한 프레임에 걸리는 시간을 담을 변수
     int nScore = 0; // 점수
-    bool isSucceed = false;
+   
 
-    public void ReStart(){ //버튼을 눌렀을때 실행되는 함수
+    public void ReStart()
+    { //버튼을 눌렀을때 실행되는 함수
 
         nScore = 0; //점수 초기화        
-       
+
         SceneManager.LoadScene("GameScene"); // LoadScene 메소드를 사용하여 초기에 저장된
                                              // GameSene를 불러온다 
 
@@ -32,16 +33,19 @@ public class GameDirector : MonoBehaviour
 
     void ReposCar() //차 위치 초기화 함수
     {
-        fDelta += Time.deltaTime; // 한 프레임에 걸리는 시간을 담는다.
-        if (fDelta >= 1.0f) //만약 fDelta가 1초 이상이 되면
-        {
-            fDelta = 0.0f; //초기화
+        
             this.gCar.transform.position = CarController.vRePos; //차동차의 위치를 처음으로 돌린다.   
-            if (isSucceed == true) { //성공이면 
-                this.nScore += 10; //점수 증가
-                isSucceed = false; //다시 실패로 초기화
-            }
-        }
+            
+            
+        
+    }
+
+    //점수 증가
+    void UpScore() {
+
+        
+            nScore += 10; //10점 증가
+        
     }
 
     // Start is called before the first frame update
@@ -59,7 +63,7 @@ public class GameDirector : MonoBehaviour
     void Update()
     {
         gBtnRE.SetActive(false);
-        
+
         fLength = this.gFlag.transform.position.x - this.gCar.transform.position.x;
         //                     깃발의 좌표              -      자동차의 좌표 
         //                    = 목표지점까지의 남은 거리
@@ -69,7 +73,7 @@ public class GameDirector : MonoBehaviour
         this.gDitance.GetComponent<Text>().color = Color.black; //색상 변경 color는 unityengine
                                                                 //네임스페이스에 포함
         this.gDitance.GetComponent<Text>().fontSize = 64;   //폰트 사이즈
-        
+
         this.gDitance.GetComponent<Text>().text = "목표지점까지" + fLength.ToString("F2") + "m";
         this.gChance.GetComponent<Text>().text = "남은 기회: " + CarController.nCount.ToString("D2");
         this.gScoreUI.GetComponent<Text>().text = "점수 : " + nScore.ToString();
@@ -93,7 +97,7 @@ public class GameDirector : MonoBehaviour
                 gBtnRE.SetActive(true); //초기화 버튼을 활성화
             }
 
-        
+
 
             if (fLength > 1.5 && gCar.transform.position.x != CarController.vRePos.x) // 깃발에 도달하지 못하였을때
             {
@@ -102,8 +106,14 @@ public class GameDirector : MonoBehaviour
                                                                       //네임스페이스에 포함
                 this.gDitance.GetComponent<Text>().text = "ㅎ..";
 
-
-                ReposCar(); //차 위치 초기화
+                fDelta += Time.deltaTime; // 한 프레임에 걸리는 시간을 담는다.
+                if (fDelta >= 1.0f) //만약 fDelta가 1초 이상이 되면
+                {
+                    fDelta = 0.0f; //초기화
+              
+                    ReposCar(); //차 위치 초기화
+                }
+         
             }
             else if (fLength >= -1.5 && fLength <= 1.5)
             { //남은 거리가 1 이하 -1 이상 이라면
@@ -114,8 +124,13 @@ public class GameDirector : MonoBehaviour
                 this.gDitance.GetComponent<Text>().color = Color.yellow; //색상 변경 color는 unityengine
                                                                          //네임스페이스에 포함
                 this.gDitance.GetComponent<Text>().text = "성공!";
-                isSucceed = true; //성공
-                ReposCar(); //차 위치 초기화+점수 증가
+                fDelta += Time.deltaTime; // 한 프레임에 걸리는 시간을 담는다.
+                if (fDelta >= 1.0f) //만약 fDelta가 1초 이상이 되면
+                {
+                    fDelta = 0.0f; //초기화
+                    UpScore(); //점수 증가
+                    ReposCar(); //차 위치 초기화
+                }
             }
             else if (fLength < -1.5f)
             { // 지나치면  
@@ -126,14 +141,20 @@ public class GameDirector : MonoBehaviour
                                                                       //네임스페이스에 포함
                 this.gDitance.GetComponent<Text>().text = "ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ";
 
-                ReposCar(); //차 위치 초기화
+                fDelta += Time.deltaTime; // 한 프레임에 걸리는 시간을 담는다.
+                if (fDelta >= 1.0f) //만약 fDelta가 1초 이상이 되면
+                {
+                    fDelta = 0.0f; //초기화
+                    ReposCar(); //차 위치 초기화
+                }
+
             }
-            
+
         }
 
-     }
-    
- }
+    }
+
+}
 
 
 /*

@@ -7,6 +7,7 @@ public class CarController : MonoBehaviour
     public  static float fSpeed;
     Vector2 vStartPos = new Vector2(0.0f, 0.0f); // 마우스를 클릭할시 마우스의 좌표
     Vector2 vEndPos = new Vector2(0.0f, 0.0f); // 마우스에서 손을 뗄 때의 마우스 좌표
+    
     public static Vector2 vRePos = Vector2.zero;
     float fSwipeLenth = 0.0f; // 마우스로 스와이프를 한 길이  
     public static int nCount = 0; //남은 횟수
